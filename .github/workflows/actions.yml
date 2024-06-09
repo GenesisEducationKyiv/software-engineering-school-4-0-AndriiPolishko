@@ -1,0 +1,26 @@
+name: Actions
+
+on:
+  push:
+    branches: [ main, project ]
+  pull_request:
+    branches: [ main, project ]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '16'  # Use the node version that matches your development environment
+
+    - name: Install Dependencies
+      run: yarn install
+
+    - name: Run ESLint
+      run: yarn lint
+      env:
+        CI: true

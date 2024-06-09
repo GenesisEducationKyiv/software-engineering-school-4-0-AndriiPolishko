@@ -1,7 +1,7 @@
 import { Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { ScheduleModule } from "@nestjs/schedule";
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule } from "@nestjs/config";
 
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
@@ -13,7 +13,7 @@ import { MailerModule } from "@nestjs-modules/mailer";
   imports: [
     TypeOrmModule.forRoot({
       type: "mysql",
-      host: 'mysqlContainer', // "127.0.0.1", 'mysqlContainer',
+      host: "mysqlContainer", // "127.0.0.1", 'mysqlContainer',
       port: 3306,
       username: "root",
       password: "root",
@@ -24,7 +24,7 @@ import { MailerModule } from "@nestjs-modules/mailer";
       logging: ["error"],
       synchronize: false,
     }),
-    ConfigModule.forRoot({isGlobal: true}),
+    ConfigModule.forRoot({ isGlobal: true }),
     ExchangeModule,
     MailerModule.forRoot({
       transport: {
@@ -33,12 +33,12 @@ import { MailerModule } from "@nestjs-modules/mailer";
         port: 465,
         secure: true,
         auth: {
-          user:  process.env.SENDER_EMAIL,
+          user: process.env.SENDER_EMAIL,
           pass: process.env.APP_PASSWORD,
         },
       },
     }),
-    ScheduleModule.forRoot()
+    ScheduleModule.forRoot(),
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -12,6 +12,6 @@ export class CreateSubscriberTable1716109246788 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(`DROP TABLE IF EXISTS subscriber`);
+    await queryRunner.query("DROP TABLE IF EXISTS subscriber");
   }
 }
