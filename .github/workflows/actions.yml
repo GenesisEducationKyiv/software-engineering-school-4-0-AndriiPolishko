@@ -22,5 +22,6 @@ jobs:
 
     - name: Run ESLint
       run: yarn lint
+
       env:
         CI: true
