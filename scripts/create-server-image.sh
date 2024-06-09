@@ -1,1 +1,0 @@
-docker build -t genesis-test-proj-image .
