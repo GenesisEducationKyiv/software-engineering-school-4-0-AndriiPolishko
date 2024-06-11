@@ -1,4 +1,4 @@
-name: ESLint Check
+name: Code Quality Checks
 
 on:
   push:
@@ -8,21 +8,38 @@ on:
 
 jobs:
   lint:
+    name: Lint Code with ESLint
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3  # Updated to the latest version of the checkout action
-
+    - uses: actions/checkout@v3
     - name: Set up Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: '18'  # Adjust based on the Node.js version you want to use
+        node-version: '18' 
         cache: 'yarn'
-
     - name: Install Dependencies
       run: yarn install
-
     - name: Run ESLint
-      run: yarn lint  # Your script from package.json
+      run: yarn lint
+      env:
+        CI: true
+
+  format:
+    name: Check Formatting with Prettier
+    runs-on: ubuntu-latest
+    needs: lint 
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        cache: 'yarn'
+    - name: Install Dependencies
+      run: yarn install
+    - name: Run Prettier Check
+      run: yarn prettier:check
       env:
         CI: true
