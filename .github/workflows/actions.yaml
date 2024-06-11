@@ -16,7 +16,7 @@ jobs:
     - name: Set up Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: '16'  # Adjust based on the Node.js version you want to use
+        node-version: '18'  # Adjust based on the Node.js version you want to use
         cache: 'yarn'
 
     - name: Install Dependencies
