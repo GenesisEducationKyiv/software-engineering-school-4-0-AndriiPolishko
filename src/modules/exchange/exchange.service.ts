@@ -1,19 +1,19 @@
-import { Injectable } from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
-import axios from "axios";
-import { HttpException, HttpStatus } from "@nestjs/common";
-import { MailerService } from "@nestjs-modules/mailer";
-import { Cron } from "@nestjs/schedule";
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import axios from 'axios';
+import { HttpException, HttpStatus } from '@nestjs/common';
+import { MailerService } from '@nestjs-modules/mailer';
+import { Cron } from '@nestjs/schedule';
 
-import { Subscriber } from "../../db/entities/subscriber.entity";
+import { Subscriber } from '../../db/entities/subscriber.entity';
 
 @Injectable()
 export class ExchangeService {
-  private exchangeBaseUrl = "https://v6.exchangerate-api.com/v6/";
+  private exchangeBaseUrl = 'https://v6.exchangerate-api.com/v6/';
 
   // This key should in the .env file
-  private apiKey = "9664c502db83b3fc33518fae";
+  private apiKey = '9664c502db83b3fc33518fae';
 
   constructor(
     @InjectRepository(Subscriber)
@@ -47,7 +47,7 @@ export class ExchangeService {
     });
 
     if (existingSubscriber) {
-      throw new HttpException("Subscriber already exists", HttpStatus.CONFLICT);
+      throw new HttpException('Subscriber already exists', HttpStatus.CONFLICT);
     }
 
     const subscriber = new Subscriber();
@@ -58,7 +58,7 @@ export class ExchangeService {
     return this.subscriberRepository.save(subscriber);
   }
 
-  @Cron("00 00 12 * * *")
+  @Cron('00 00 12 * * *')
   /**
    * This function sends emails to all subscribers every day at 12 am seconds.
    * It also can be called manually by sending a GET request to /exchange/send-emails
@@ -70,13 +70,13 @@ export class ExchangeService {
       allSubscribers.forEach(subscriber => {
         this.mailService.sendMail({
           to: subscriber.email,
-          from: "andrii",
-          subject: "Current USD to UAH rate",
+          from: 'andrii',
+          subject: 'Current USD to UAH rate',
           text: `Hello my dear subscriber!\nYou can buy 1 UAH for ${usdUahRate} USD, or 1 USD for ${1 / usdUahRate} UAH.\nHave a nice day!`,
         });
       });
 
-      return "Emails sent";
+      return 'Emails sent';
     } catch (error) {
       throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }

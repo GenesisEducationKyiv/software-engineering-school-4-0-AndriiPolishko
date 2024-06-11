@@ -1,0 +1,28 @@
+name: ESLint Check
+
+on:
+  push:
+    branches: [ hw1-cleancode ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3  # Updated to the latest version of the checkout action
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '16'  # Adjust based on the Node.js version you want to use
+        cache: 'yarn'
+
+    - name: Install Dependencies
+      run: yarn install
+
+    - name: Run ESLint
+      run: yarn lint  # Your script from package.json
+      env:
+        CI: true

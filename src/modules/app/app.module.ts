@@ -1,34 +1,34 @@
-import { Module } from "@nestjs/common";
-import { TypeOrmModule } from "@nestjs/typeorm";
-import { ScheduleModule } from "@nestjs/schedule";
+import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { ScheduleModule } from '@nestjs/schedule';
 import { ConfigModule } from '@nestjs/config';
 
-import { AppController } from "./app.controller";
-import { AppService } from "./app.service";
-import { ExchangeModule } from "../exchange/exchange.module";
-import { Subscriber } from "../../db/entities/subscriber.entity";
-import { MailerModule } from "@nestjs-modules/mailer";
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
+import { ExchangeModule } from '../exchange/exchange.module';
+import { Subscriber } from '../../db/entities/subscriber.entity';
+import { MailerModule } from '@nestjs-modules/mailer';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot({
-      type: "mysql",
+      type: 'mysql',
       host: 'mysqlContainer', // "127.0.0.1",
       port: 3306,
-      username: "root",
-      password: "root",
-      database: "subscribers",
+      username: 'root',
+      password: 'root',
+      database: 'subscribers',
       entities: [Subscriber],
-      migrations: [__dirname + "/../db/migrations/*{.ts,.js}"],
+      migrations: [__dirname + '/../db/migrations/*{.ts,.js}'],
       migrationsRun: true,
-      logging: ["error"],
+      logging: ['error'],
       synchronize: false,
     }),
     ExchangeModule,
     MailerModule.forRoot({
       transport: {
-        service: "Gmail",
-        host: "smtp.gmail.com",
+        service: 'Gmail',
+        host: 'smtp.gmail.com',
         port: 465,
         secure: true,
         auth: {
@@ -40,7 +40,7 @@ import { MailerModule } from "@nestjs-modules/mailer";
     ScheduleModule.forRoot(),
     ConfigModule.forRoot({
       isGlobal: true,
-    })
+    }),
   ],
   controllers: [AppController],
   providers: [AppService],
