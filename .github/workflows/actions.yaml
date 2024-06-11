@@ -21,7 +21,7 @@ jobs:
     - name: Install Dependencies
       run: yarn install
     - name: Run ESLint
-      run: yarn lint
+      run: yarn lint-check
       env:
         CI: true
 
@@ -40,6 +40,6 @@ jobs:
     - name: Install Dependencies
       run: yarn install
     - name: Run Prettier Check
-      run: yarn format
+      run: yarn format-check
       env:
         CI: true
