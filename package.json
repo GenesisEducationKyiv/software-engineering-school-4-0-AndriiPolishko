@@ -24,7 +24,8 @@
     "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js --dataSource src/db/data-source.ts",
     "migration:run": "yarn typeorm migration:run",
     "migration:revert": "yarn typeorm migration:revert",
-    "start-with-migrations": "yarn migration:run && yarn start"
+    "start-with-migrations": "yarn migration:run && yarn start",
+    "postinstall": "husky"
   },
   "dependencies": {
     "@nestjs-modules/mailer": "^2.0.2",
@@ -37,6 +38,7 @@
     "@nestjs/typeorm": "^10.0.2",
     "@types/nodemailer": "^6.4.15",
     "axios": "^1.6.8",
+    "husky": "^9.0.11",
     "mysql2": "^3.9.7",
     "nodemailer": "^6.9.13",
     "reflect-metadata": "^0.2.0",
