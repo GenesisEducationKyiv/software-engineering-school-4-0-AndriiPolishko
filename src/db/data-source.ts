@@ -1,4 +1,4 @@
-import { DataSource } from "typeorm";
+import { DataSource } from 'typeorm';
 
 export const AppDataSource = new DataSource({
     type: "mysql",
@@ -10,6 +10,6 @@ export const AppDataSource = new DataSource({
   entities: [__dirname + "/../**/*.entity{.ts,.js}"],
   migrations: [__dirname + "/../db/migrations/*{.ts,.js}"],
   migrationsRun: true,
-  logging: ["error"],
+  logging: ['error'],
   synchronize: false,
 });

@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { HttpException, HttpStatus } from '@nestjs/common';
+import { HttpException } from '@nestjs/common';
 import axios from 'axios';
 import { MailerService } from '@nestjs-modules/mailer';
 import { Repository } from 'typeorm';
