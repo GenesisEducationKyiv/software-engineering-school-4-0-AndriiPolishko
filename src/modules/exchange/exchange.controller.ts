@@ -8,7 +8,7 @@ export class ExchangeController {
   constructor(private service: ExchangeService) {}
 
   @Get('rate')
-  @ApiTags('rate')
+  @ApiTags("rate")
   getRate(@Query('currency') currency: string) {
     return this.service.getUsdUahRate(currency);
   }
