@@ -8,12 +8,12 @@ export class ExchangeController {
   constructor(private service: ExchangeService) {}
 
   @Get('rate')
-  @ApiTags("rate")
+  @ApiTags('rate')
   getRate(@Query('currency') currency: string) {
     return this.service.getUsdUahRate(currency);
   }
 
-  @Post("subscribe")
+  @Post('subscribe')
   @ApiTags('subscription')
   async subscribe(@Body() body: { email: string }) {
     const { email } = body;
