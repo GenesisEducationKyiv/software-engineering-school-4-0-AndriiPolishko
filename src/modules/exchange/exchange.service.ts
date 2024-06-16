@@ -6,15 +6,15 @@ import { HttpException, HttpStatus } from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer';
 import { Cron } from '@nestjs/schedule';
 
-import { Subscriber } from "../../db/entities/subscriber.entity";
-import { RateResponce } from "./dto/exchange.dto";
+import { Subscriber } from '../../db/entities/subscriber.entity';
+import { RateResponce } from './dto/exchange.dto';
 
 interface ExchangeData {
   conversion_rates: {
     USD: number;
     UAH: number;
-    }
-  }
+  };
+}
 
 @Injectable()
 export class ExchangeService {
@@ -41,8 +41,8 @@ export class ExchangeService {
       return {
         conversion_rates: {
           USD: data.conversion_rates.USD,
-          UAH: data.conversion_rates.UAH
-        }
+          UAH: data.conversion_rates.UAH,
+        },
       };
     } catch (error) {
       console.log(error);

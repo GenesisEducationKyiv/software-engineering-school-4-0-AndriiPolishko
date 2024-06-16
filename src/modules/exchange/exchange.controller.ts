@@ -1,15 +1,15 @@
-import { Controller, Get, Post, Body, Query } from "@nestjs/common";
-import { ApiTags } from "@nestjs/swagger";
-import { ExchangeService } from "./exchange.service";
+import { Controller, Get, Post, Body, Query } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
+import { ExchangeService } from './exchange.service';
 
 @ApiTags('exchange')
 @Controller('exchange')
 export class ExchangeController {
   constructor(private service: ExchangeService) {}
 
-  @Get("rate")
-  @ApiTags("rate")
-  getRate(@Query("currency") currency: string){
+  @Get('rate')
+  @ApiTags('rate')
+  getRate(@Query('currency') currency: string) {
     return this.service.getUsdUahRate(currency);
   }
 

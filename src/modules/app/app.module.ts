@@ -12,7 +12,7 @@ import { MailerModule } from '@nestjs-modules/mailer';
 @Module({
   imports: [
     TypeOrmModule.forRoot({
-      type: "mysql",
+      type: 'mysql',
       host: process.env.DB_HOST,
       port: 3306,
       username: 'root',
