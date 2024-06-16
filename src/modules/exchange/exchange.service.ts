@@ -7,13 +7,20 @@ import { MailerService } from "@nestjs-modules/mailer";
 import { Cron } from "@nestjs/schedule";
 
 import { Subscriber } from "../../db/entities/subscriber.entity";
+import { RateResponce } from "./dto/exchange.dto";
+
+interface ExchangeData {
+  conversion_rates: {
+    USD: number;
+    UAH: number;
+    }
+  }
 
 @Injectable()
 export class ExchangeService {
   private exchangeBaseUrl = "https://v6.exchangerate-api.com/v6/";
 
-  // This key should in the .env file
-  private apiKey = "9664c502db83b3fc33518fae";
+  private apiKey = process.env.EXCHANGE_API_KEY;
 
   constructor(
     @InjectRepository(Subscriber)
@@ -23,15 +30,24 @@ export class ExchangeService {
 
   /**
    * This functions makes a request to the exchange rate API and returns the current USD to UAH rate.
+   * @param currency
    * @returns
    */
-  public async getUsdUahRate(): Promise<number> {
+  public async getUsdUahRate(currency: string = 'UAH'): Promise<RateResponce> {
     try {
-      const res = await axios.get(`${this.exchangeBaseUrl}${this.apiKey}/latest/UAH`);
+      const res = await axios.get(`${this.exchangeBaseUrl}${this.apiKey}/latest/${currency}`);
+      const data: ExchangeData = res.data;
 
-      return res.data.conversion_rates.USD;
+      return {
+        conversion_rates: {
+          USD: data.conversion_rates.USD,
+          UAH: data.conversion_rates.UAH
+        }
+      };
     } catch (error) {
-      throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
+      console.log(error);
+
+      throw new HttpException(`Error while trying to get the exchange rate of ${currency}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -65,7 +81,8 @@ export class ExchangeService {
    * */
   public async sendEmails() {
     try {
-      const usdUahRate = await this.getUsdUahRate();
+      const { conversion_rates } = await this.getUsdUahRate();
+      const usdUahRate = conversion_rates.USD;
       const allSubscribers = await this.subscriberRepository.find();
       allSubscribers.forEach(subscriber => {
         this.mailService.sendMail({
