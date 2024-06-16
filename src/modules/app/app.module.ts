@@ -2,12 +2,13 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ScheduleModule } from '@nestjs/schedule';
 import { ConfigModule } from '@nestjs/config';
+import { MailerModule } from '@nestjs-modules/mailer';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ExchangeModule } from '../exchange/exchange.module';
 import { Subscriber } from '../../db/entities/subscriber.entity';
-import { MailerModule } from '@nestjs-modules/mailer';
+import { MyMailerModule } from '../myMailer/myMailer.module';
 
 @Module({
   imports: [
@@ -24,7 +25,6 @@ import { MailerModule } from '@nestjs-modules/mailer';
       logging: ['error'],
       synchronize: false,
     }),
-    ExchangeModule,
     MailerModule.forRoot({
       transport: {
         service: 'Gmail',
@@ -41,6 +41,8 @@ import { MailerModule } from '@nestjs-modules/mailer';
     ConfigModule.forRoot({
       isGlobal: true,
     }),
+    ExchangeModule,
+    MyMailerModule,
   ],
   controllers: [AppController],
   providers: [AppService],

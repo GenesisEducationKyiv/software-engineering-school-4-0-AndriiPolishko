@@ -20,10 +20,4 @@ export class ExchangeController {
 
     return await this.service.subscribe(email);
   }
-
-  @Get('send-emails')
-  @ApiTags('subscription')
-  async sendEmails() {
-    return await this.service.sendEmails();
-  }
 }
