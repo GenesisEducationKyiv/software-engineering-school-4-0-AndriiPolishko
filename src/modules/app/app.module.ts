@@ -15,10 +15,10 @@ import { MyMailerModule } from '../myMailer/myMailer.module';
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: process.env.DB_HOST,
-      port: 3306,
-      username: 'root',
-      password: 'root',
-      database: 'subscribers',
+      port: process.env.MYSQL_PORT ? parseInt(process.env.MYSQL_PORT) : 3306,
+      username: process.env.MYSQL_USER,
+      password: process.env.MYSQL_PASSWORD,
+      database: process.env.MYSQL_DATABASE,
       entities: [Subscriber],
       migrations: [__dirname + '/../db/migrations/*{.ts,.js}'],
       migrationsRun: true,
@@ -27,9 +27,9 @@ import { MyMailerModule } from '../myMailer/myMailer.module';
     }),
     MailerModule.forRoot({
       transport: {
-        service: 'Gmail',
-        host: 'smtp.gmail.com',
-        port: 465,
+        service: process.env.MAILER_SERVICE,
+        host: process.env.MAILER_HOST,
+        port: process.env.MAILER_PORT ? parseInt(process.env.MAILER_PORT) : 465,
         secure: true,
         auth: {
           user: process.env.SENDER_EMAIL,
