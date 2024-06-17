@@ -1,4 +1,4 @@
-import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Cron } from '@nestjs/schedule';
@@ -28,7 +28,7 @@ export class MyMailerService {
       allSubscribers.forEach(subscriber => {
         this.mailService.sendMail({
           to: subscriber.email,
-          from: 'andrii',
+          from: 'Andrii',
           subject: 'Current USD to UAH rate',
           text: `Hello my dear subscriber!\nYou can buy 1 UAH for ${usdUahRate} USD, or 1 USD for ${1 / usdUahRate} UAH.\nHave a nice day!`,
         });
@@ -36,7 +36,9 @@ export class MyMailerService {
 
       return 'Emails sent';
     } catch (error) {
-      throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
+      console.log(error);
+
+      return 'Internal error while trying to send emails';
     }
   }
 }
