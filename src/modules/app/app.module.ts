@@ -12,6 +12,9 @@ import { MyMailerModule } from '../myMailer/myMailer.module';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: process.env.DB_HOST,
@@ -38,9 +41,6 @@ import { MyMailerModule } from '../myMailer/myMailer.module';
       },
     }),
     ScheduleModule.forRoot(),
-    ConfigModule.forRoot({
-      isGlobal: true,
-    }),
     ExchangeModule,
     MyMailerModule,
   ],
