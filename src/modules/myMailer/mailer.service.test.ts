@@ -65,6 +65,6 @@ describe('ExchangeService', () => {
 
     const { message } = await service.sendEmails();
 
-    await expect(message).toEqual('Internal error while trying to send email');
+    await expect(message).toEqual('Internal error while trying to send emails');
   });
 });
