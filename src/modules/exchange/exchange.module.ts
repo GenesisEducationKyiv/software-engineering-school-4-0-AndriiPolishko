@@ -9,5 +9,6 @@ import { Subscriber } from '../../db/entities/subscriber.entity';
   imports: [TypeOrmModule.forFeature([Subscriber])],
   controllers: [ExchangeController],
   providers: [ExchangeService],
+  exports: [ExchangeService],
 })
 export class ExchangeModule {}

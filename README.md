@@ -3,6 +3,13 @@
 ### Note
 for some reason when I running MySQL from docker compose I can't get access to it. Because of this I am setting up containers using bash scripts
 
+## Description
+This app can be fully containerised, or you can run server locally for the quicker debugging. 
+
+## Env
+- Most of the fields you need to fill with your private data
+- DB_HOST should have the value of the data base host. When you run the serer locally this value should equal to `"127.0.0.1"` and when you run the server from the container, change it to `"mysqlContainer"`
+
 ## How to run
 - Insure you are in the root of project
 - Create server image by running `sh ./scripts/create-server-image.sh`

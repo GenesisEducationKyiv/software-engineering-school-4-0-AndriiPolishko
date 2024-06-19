@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body } from '@nestjs/common';
+import { Controller, Get, Post, Body, Query } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { ExchangeService } from './exchange.service';
 
@@ -9,8 +9,8 @@ export class ExchangeController {
 
   @Get('rate')
   @ApiTags('rate')
-  getRate() {
-    return this.service.getUsdUahRate();
+  getRate(@Query('currency') currency: string) {
+    return this.service.getUsdUahRate(currency);
   }
 
   @Post('subscribe')
@@ -19,11 +19,5 @@ export class ExchangeController {
     const { email } = body;
 
     return await this.service.subscribe(email);
-  }
-
-  @Get('send-emails')
-  @ApiTags('subscription')
-  async sendEmails() {
-    return await this.service.sendEmails();
   }
 }

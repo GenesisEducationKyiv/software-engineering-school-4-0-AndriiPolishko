@@ -24,7 +24,9 @@
     "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js --dataSource src/db/data-source.ts",
     "migration:run": "yarn typeorm migration:run",
     "migration:revert": "yarn typeorm migration:revert",
-    "start-with-migrations": "yarn migration:run && yarn start"
+    "start-with-migrations": "yarn migration:run && yarn start",
+    "postinstall": "husky",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@nestjs-modules/mailer": "^2.0.2",
@@ -56,6 +58,7 @@
     "eslint": "^8.42.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-prettier": "^5.0.0",
+    "husky": "^8.0.0",
     "jest": "^29.5.0",
     "prettier": "^3.0.0",
     "source-map-support": "^0.5.21",
