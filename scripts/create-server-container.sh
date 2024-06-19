@@ -1,0 +1,1 @@
+docker run -p 3000:3000 --name genesis-test-proj-container --network mynetwork -d genesis-test-proj-image
