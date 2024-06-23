@@ -17,6 +17,7 @@ interface ExchangeData {
 @Injectable()
 export class ExchangeService {
   private exchangeBaseUrl = 'https://v6.exchangerate-api.com/v6/';
+  private privatApi = 'https://api.privatbank.ua/p24api/pubinfo?exchange&coursid=5';
 
   private apiKey = process.env.EXCHANGE_API_KEY;
 
@@ -33,7 +34,8 @@ export class ExchangeService {
   public async getUsdUahRate(currency: string = 'UAH'): Promise<RateResponce> {
     try {
       const res = await axios.get(`${this.exchangeBaseUrl}${this.apiKey}/latest/${currency}`);
-      const data: ExchangeData = res.data;
+      const privatRes = await axios.get(this.privatApi);
+      const data: ExchangeData = res.data || privatRes.data[0];
 
       return {
         conversion_rates: {
@@ -46,28 +48,5 @@ export class ExchangeService {
 
       throw new HttpException(`Error while trying to get the exchange rate of ${currency}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
-  }
-
-  /**
-   * This function adds a new subscriber to the database.
-   * If the subscriber already exists, it throws a 409 error.
-   * @param email
-   * @returns
-   */
-  public async subscribe(email: string): Promise<Subscriber> {
-    const existingSubscriber = await this.subscriberRepository.findOne({
-      where: { email },
-    });
-
-    if (existingSubscriber) {
-      throw new HttpException('Subscriber already exists', HttpStatus.CONFLICT);
-    }
-
-    const subscriber = new Subscriber();
-
-    subscriber.email = email;
-    subscriber.dateCreated = new Date();
-
-    return this.subscriberRepository.save(subscriber);
   }
 }
