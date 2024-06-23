@@ -6,6 +6,7 @@ import { MailerService } from '@nestjs-modules/mailer';
 
 import { ExchangeService } from '../exchange/exchange.service';
 import { Subscriber } from '../../db/entities/subscriber.entity';
+import { EmailSendResponse } from './dto/myMailer.dto';
 
 @Injectable()
 export class MyMailerService {
@@ -20,7 +21,7 @@ export class MyMailerService {
    * This function sends emails to all subscribers every day at 12 am seconds.
    * It also can be called manually by sending a GET request to /exchange/send-emails
    * */
-  public async sendEmails() {
+  public async sendEmails(): Promise<EmailSendResponse> {
     try {
       const { conversion_rates } = await this.exchangeService.getUsdUahRate();
       const usdUahRate = conversion_rates.USD;
@@ -30,15 +31,15 @@ export class MyMailerService {
           to: subscriber.email,
           from: 'Andrii',
           subject: 'Current USD to UAH rate',
-          text: `Hello my dear subscriber!\nYou can buy 1 UAH for ${usdUahRate} USD, or 1 USD for ${1 / usdUahRate} UAH.\nHave a nice day!`,
+          text: `Hello my dear subscriber!\nYou can buy 1 UAH for ${1 / usdUahRate} USD, or 1 USD for ${usdUahRate} UAH.\nHave a nice day!`,
         });
       });
 
-      return 'Emails sent';
+      return { message: 'Emails sent' };
     } catch (error) {
       console.log(error);
 
-      return 'Internal error while trying to send emails';
+      return { message: 'Internal error while trying to send emails', error };
     }
   }
 }
