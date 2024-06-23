@@ -9,5 +9,5 @@ export const TypeORMMySqlTestingModule = (entities?: any[]) =>
     subscribers: [],
     synchronize: true,
     migrationsRun: true,
-    logging: false
+    logging: false,
   });
