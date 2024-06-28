@@ -2,11 +2,21 @@ import { BaseExchangeService, MonoBankData } from '../echange.abstract';
 import { RateResponce } from '../dto/exchange.dto';
 
 export class MonoBankService extends BaseExchangeService {
-  protected requestURL: string = 'https://api.monobank.ua/bank/currency';
+  constructor(nextExchangeService?: BaseExchangeService, requestURL?: string) {
+    super(nextExchangeService, requestURL);
 
+    this.requestURL = 'https://api.monobank.ua/bank/currency';
+  }
+
+  /**
+   * Function to get the current USD to UAH rate
+   * @returns
+   */
   public async getUsdUahRate(): Promise<RateResponce> {
     const data = (await this.getCurrencyData()) as MonoBankData[];
-    const usdRate = data.find(rate => rate.currencyCodeA === 840 && rate.currencyCodeB === 980);
+    const usdCurrencyCode = 840;
+    const uahCurrencyCode = 980;
+    const usdRate = data.find(rate => rate.currencyCodeA === usdCurrencyCode && rate.currencyCodeB === uahCurrencyCode);
 
     return {
       conversion_rates: {

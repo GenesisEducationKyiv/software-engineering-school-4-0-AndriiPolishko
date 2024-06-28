@@ -31,7 +31,7 @@ export class MyMailerService {
           to: subscriber.email,
           from: 'Andrii',
           subject: 'Current USD to UAH rate',
-          text: `Hello my dear subscriber!\nYou can buy 1 UAH for ${1 / usdUahRate} USD, or 1 USD for ${usdUahRate} UAH.\nHave a nice day!`,
+          text: this.generateText(usdUahRate),
         });
       });
 
@@ -41,5 +41,9 @@ export class MyMailerService {
 
       return { message: 'Internal error while trying to send emails', error };
     }
+  }
+
+  private generateText(usdUahRate: number): string {
+    return `Hello my dear subscriber!\nYou can buy 1 UAH for ${1 / usdUahRate} USD, or 1 USD for ${usdUahRate} UAH.\nHave a nice day!`;
   }
 }

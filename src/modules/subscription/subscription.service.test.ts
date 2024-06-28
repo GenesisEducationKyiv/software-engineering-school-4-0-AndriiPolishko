@@ -40,14 +40,14 @@ describe('ExchangeService', () => {
     jest.clearAllMocks();
   });
 
-  // it('should add a new subscriber', async () => {
-  //   const email = 'test@example.com';
+  it('should add a new subscriber', async () => {
+    const email = 'test@example.com';
+    jest.spyOn(subscriberRepository, 'findOne').mockResolvedValue(null);
+    jest.spyOn(subscriberRepository, 'save').mockResolvedValue({ email } as Subscriber);
 
-  //   subscriberRepository.save({ id: 1, email });
-
-  //   const subscriber = await service.subscribe(email);
-  //   expect(subscriber.email).toEqual(email);
-  // });
+    const subscriber = await service.subscribe(email);
+    expect(subscriber.email).toEqual(email);
+  });
 
   it('should throw an error if the subscriber already exists', async () => {
     const email = 'test@example.com';

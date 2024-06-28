@@ -36,7 +36,7 @@ export abstract class BaseExchangeService {
 
   protected requestURL: string;
 
-  protected currentProvider: Provider;
+  private currentProvider: Provider;
 
   constructor(nextExchangeService?: BaseExchangeService, requestURL?: string) {
     this.requestURL = requestURL;

@@ -1,30 +1,28 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { getRepositoryToken } from '@nestjs/typeorm';
 import { HttpException } from '@nestjs/common';
 import axios from 'axios';
-
 import { MailerService } from '@nestjs-modules/mailer';
-import { Repository } from 'typeorm';
+
 import { ExchangeService } from './exchange.service';
-import { Subscriber } from '../../db/entities/subscriber.entity';
-import { SubscriptionService } from '../subscription/subscription.service';
+import { ExchangeRateService } from './exchangeProviders/exchange-rate.service';
+import { MonoBankService } from './exchangeProviders/mono-bank.service';
+import { PrivatBankService } from './exchangeProviders/privat-bank.service';
 
 jest.mock('axios');
 
 describe('ExchangeService', () => {
   let service: ExchangeService;
-  let subscriberRepository: Repository<Subscriber>;
-  let subscriptionService: SubscriptionService;
+  let exchangeRateService: ExchangeRateService;
+  let monoBankService: MonoBankService;
+  let privatBankService: PrivatBankService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         ExchangeService,
-        SubscriptionService,
-        {
-          provide: getRepositoryToken(Subscriber),
-          useClass: Repository,
-        },
+        ExchangeRateService,
+        MonoBankService,
+        PrivatBankService,
         {
           provide: MailerService,
           useValue: {
@@ -35,8 +33,9 @@ describe('ExchangeService', () => {
     }).compile();
 
     service = module.get<ExchangeService>(ExchangeService);
-    subscriptionService = module.get<SubscriptionService>(SubscriptionService);
-    subscriberRepository = module.get<Repository<Subscriber>>(getRepositoryToken(Subscriber));
+    exchangeRateService = module.get<ExchangeRateService>(ExchangeRateService);
+    monoBankService = module.get<MonoBankService>(MonoBankService);
+    privatBankService = module.get<PrivatBankService>(PrivatBankService);
   });
 
   afterEach(() => {
@@ -60,21 +59,30 @@ describe('ExchangeService', () => {
     await expect(service.getUsdUahRate()).rejects.toThrow(HttpException);
   });
 
-  describe('subscribe', () => {
-    it('should add a new subscriber', async () => {
-      const email = 'test@example.com';
-      jest.spyOn(subscriberRepository, 'findOne').mockResolvedValue(null);
-      jest.spyOn(subscriberRepository, 'save').mockResolvedValue({ email } as Subscriber);
+  it('Exchange Rate. Should correctly extract USD price', async () => {
+    jest.spyOn(exchangeRateService, 'getCurrencyData').mockResolvedValue({ conversion_rates: { USD: 28 } });
 
-      const subscriber = await subscriptionService.subscribe(email);
-      expect(subscriber.email).toEqual(email);
-    });
+    const rate = await exchangeRateService.getUsdUahRate();
 
-    it('should throw an error if the subscriber already exists', async () => {
-      const email = 'test@example.com';
-      jest.spyOn(subscriberRepository, 'findOne').mockResolvedValue({ email } as Subscriber);
+    expect(rate.conversion_rates.USD).toEqual(28);
+  });
 
-      await expect(subscriptionService.subscribe(email)).rejects.toThrow(HttpException);
-    });
+  it('Mono Bank. Should correctly extract USD price', async () => {
+    jest.spyOn(monoBankService, 'getCurrencyData').mockResolvedValue([{ currencyCodeA: 840, currencyCodeB: 980, rateBuy: 28, rateSell: 28.5 }]);
+
+    const rate = await monoBankService.getUsdUahRate();
+
+    expect(rate.conversion_rates.USD).toEqual(28);
+  });
+
+  it('Privat Bank. Should correctly extract USD price', async () => {
+    jest.spyOn(privatBankService, 'getCurrencyData').mockResolvedValue([
+      { ccy: 'EUR', base_ccy: 'UAH', buy: '43', sale: '44' },
+      { ccy: 'USD', base_ccy: 'UAH', buy: '28', sale: '28.5' },
+    ]);
+
+    const rate = await privatBankService.getUsdUahRate();
+
+    expect(rate.conversion_rates.USD).toEqual(28);
   });
 });
