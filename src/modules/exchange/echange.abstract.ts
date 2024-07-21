@@ -67,6 +67,9 @@ export abstract class BaseExchangeService {
     }
   }
 
+  /**
+   * Abstract function to get the USD to UAH rate
+   */
   public abstract getUsdUahRate(): Promise<RateResponce>;
 
   /**
