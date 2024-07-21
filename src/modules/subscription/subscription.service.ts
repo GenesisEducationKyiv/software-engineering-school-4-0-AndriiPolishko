@@ -34,4 +34,12 @@ export class SubscriptionService {
 
     return this.subscriberRepository.save(subscriber);
   }
+
+  /**
+   * Get all subscribers from the database
+   * @returns
+   */
+  public async getAllSubscribers(): Promise<Subscriber[]> {
+    return this.subscriberRepository.find();
+  }
 }
