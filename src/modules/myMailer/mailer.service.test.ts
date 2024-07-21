@@ -7,10 +7,11 @@ import { ExchangeService } from '../exchange/exchange.service';
 import { Subscriber } from '../../db/entities/subscriber.entity';
 import { RateResponse } from '../exchange/dto/exchange.dto';
 import { MyMailerService } from './myMailer.service';
+import { SubscriptionService } from '../subscription/subscription.service';
 
-describe('ExchangeService', () => {
+describe('MailerService', () => {
   let exchangeService: ExchangeService;
-  let subscriberRepository: Repository<Subscriber>;
+  let subscriptionService: SubscriptionService;
   let service: MyMailerService;
   let mailService: MailerService;
 
@@ -22,6 +23,7 @@ describe('ExchangeService', () => {
           provide: getRepositoryToken(Subscriber),
           useClass: Repository,
         },
+        SubscriptionService,
         {
           provide: MailerService,
           useValue: {
@@ -34,7 +36,7 @@ describe('ExchangeService', () => {
 
     service = module.get<MyMailerService>(MyMailerService);
     exchangeService = module.get<ExchangeService>(ExchangeService);
-    subscriberRepository = module.get<Repository<Subscriber>>(getRepositoryToken(Subscriber));
+    subscriptionService = module.get<SubscriptionService>(SubscriptionService);
     mailService = module.get<MailerService>(MailerService);
   });
 
@@ -48,7 +50,7 @@ describe('ExchangeService', () => {
     const usdUahRate = exchangeRes.conversion_rates.USD;
 
     jest.spyOn(exchangeService, 'getUsdUahRate').mockResolvedValue(exchangeRes);
-    jest.spyOn(subscriberRepository, 'find').mockResolvedValue(subscribers);
+    jest.spyOn(subscriptionService, 'getAllSubscribers').mockResolvedValue(subscribers);
 
     const { message } = await service.sendEmails();
     expect(message).toEqual('Emails sent');
