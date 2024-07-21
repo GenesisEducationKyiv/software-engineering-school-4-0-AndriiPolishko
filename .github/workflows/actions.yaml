@@ -1,0 +1,63 @@
+name: Code Quality Checks
+
+on:
+  push:
+    branches: [ hw1-cleancode, main ]
+  pull_request:
+    branches: [ hw1-cleancode, main ]
+
+jobs:
+  lint:
+    name: Lint Code with ESLint
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18' 
+        cache: 'yarn'
+    - name: Install Dependencies
+      run: yarn install
+    - name: Run ESLint
+      run: yarn lint-check
+      env:
+        CI: true
+
+  format:
+    name: Check Formatting with Prettier
+    runs-on: ubuntu-latest
+    needs: lint 
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        cache: 'yarn'
+    - name: Install Dependencies
+      run: yarn install
+    - name: Run Prettier Check
+      run: yarn format-check
+      env:
+        CI: true
+  
+  test:
+    name: Run Tests with Jest
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        cache: 'yarn'
+    - name: Install Dependencies
+      run: yarn install
+    - name: Run Tests
+      run: yarn test
+      env:
+        CI: true
