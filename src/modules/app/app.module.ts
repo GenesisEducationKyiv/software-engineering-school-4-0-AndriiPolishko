@@ -7,6 +7,7 @@ import { MailerModule } from '@nestjs-modules/mailer';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ExchangeModule } from '../exchange/exchange.module';
+import { SubscriptionModule } from '../subscription/subscription.module';
 import { Subscriber } from '../../db/entities/subscriber.entity';
 import { MyMailerModule } from '../myMailer/myMailer.module';
 
@@ -43,6 +44,7 @@ import { MyMailerModule } from '../myMailer/myMailer.module';
     ScheduleModule.forRoot(),
     ExchangeModule,
     MyMailerModule,
+    SubscriptionModule,
   ],
   controllers: [AppController],
   providers: [AppService],
