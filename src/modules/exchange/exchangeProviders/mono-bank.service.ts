@@ -1,9 +1,9 @@
-import { BaseExchangeService, MonoBankData } from '../echange.abstract';
-import { RateResponce } from '../dto/exchange.dto';
+import { BaseExchangeService, ExchangeProvider, MonoBankData } from '../echange.base';
+import { RateResponse } from '../dto/exchange.dto';
 
 export class MonoBankService extends BaseExchangeService {
   constructor(nextExchangeService?: BaseExchangeService, requestURL?: string) {
-    super(nextExchangeService, requestURL);
+    super(ExchangeProvider.MonoBank, nextExchangeService, requestURL);
 
     this.requestURL = 'https://api.monobank.ua/bank/currency';
   }
@@ -12,7 +12,7 @@ export class MonoBankService extends BaseExchangeService {
    * Function to get the current USD to UAH rate
    * @returns
    */
-  public async getUsdUahRate(): Promise<RateResponce> {
+  public async getUsdUahRate(): Promise<RateResponse> {
     const data = (await this.getCurrencyData()) as MonoBankData[];
     const usdCurrencyCode = 840;
     const uahCurrencyCode = 980;

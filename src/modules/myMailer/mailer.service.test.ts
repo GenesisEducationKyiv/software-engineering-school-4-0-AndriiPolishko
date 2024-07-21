@@ -5,7 +5,7 @@ import { Repository } from 'typeorm';
 
 import { ExchangeService } from '../exchange/exchange.service';
 import { Subscriber } from '../../db/entities/subscriber.entity';
-import { RateResponce } from '../exchange/dto/exchange.dto';
+import { RateResponse } from '../exchange/dto/exchange.dto';
 import { MyMailerService } from './myMailer.service';
 
 describe('ExchangeService', () => {
@@ -44,7 +44,7 @@ describe('ExchangeService', () => {
 
   it('should send emails to all subscribers', async () => {
     const subscribers = [{ email: 'test@example.com' }] as Subscriber[];
-    const exchangeRes = { conversion_rates: { USD: 28 } } as RateResponce;
+    const exchangeRes = { conversion_rates: { USD: 28 } } as RateResponse;
     const usdUahRate = exchangeRes.conversion_rates.USD;
 
     jest.spyOn(exchangeService, 'getUsdUahRate').mockResolvedValue(exchangeRes);

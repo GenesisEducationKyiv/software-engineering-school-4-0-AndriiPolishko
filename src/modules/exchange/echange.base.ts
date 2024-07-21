@@ -1,9 +1,9 @@
 import axios from 'axios';
 import { HttpException, HttpStatus } from '@nestjs/common';
 
-import { RateResponce } from './dto/exchange.dto';
+import { RateResponse } from './dto/exchange.dto';
 
-export enum Provider {
+export enum ExchangeProvider {
   ExchangeRate = 'ExchangeRate',
   PrivatBank = 'PrivatBank',
   MonoBank = 'MonoBank',
@@ -36,11 +36,12 @@ export abstract class BaseExchangeService {
 
   protected requestURL: string;
 
-  private currentProvider: Provider;
+  private currentProvider: ExchangeProvider;
 
-  constructor(nextExchangeService?: BaseExchangeService, requestURL?: string) {
+  constructor(currentProvider: ExchangeProvider, nextExchangeService?: BaseExchangeService, requestURL?: string) {
     this.requestURL = requestURL;
     this.nextExchangeService = nextExchangeService;
+    this.currentProvider = currentProvider;
   }
 
   /**
@@ -70,15 +71,7 @@ export abstract class BaseExchangeService {
   /**
    * Abstract function to get the USD to UAH rate
    */
-  public abstract getUsdUahRate(): Promise<RateResponce>;
-
-  /**
-   * Function to set the request query
-   * @param requestURL
-   */
-  public setRequestURL(requestURL: string) {
-    this.requestURL = requestURL;
-  }
+  public abstract getUsdUahRate(): Promise<RateResponse>;
 
   /**
    * Function to choose provider to be next for the request down the chain
