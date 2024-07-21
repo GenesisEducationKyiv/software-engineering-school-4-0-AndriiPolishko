@@ -1,18 +1,16 @@
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Injectable, Inject } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
 import { MailerService } from '@nestjs-modules/mailer';
 
 import { ExchangeService } from '../exchange/exchange.service';
-import { Subscriber } from '../../db/entities/subscriber.entity';
 import { EmailSendResponse } from './dto/myMailer.dto';
+import { SubscriptionService } from '../subscription/subscription.service';
 
 @Injectable()
 export class MyMailerService {
   constructor(
     private exchangeService: ExchangeService,
-    @InjectRepository(Subscriber) private subscriberRepository: Repository<Subscriber>,
+    @Inject(SubscriptionService) private subscriptionService: SubscriptionService,
     private mailService: MailerService,
   ) {}
 
@@ -25,7 +23,7 @@ export class MyMailerService {
     try {
       const { conversion_rates } = await this.exchangeService.getUsdUahRate();
       const usdUahRate = conversion_rates.USD;
-      const allSubscribers = await this.subscriberRepository.find();
+      const allSubscribers = await this.subscriptionService.getAllSubscribers();
       allSubscribers.forEach(subscriber => {
         this.mailService.sendMail({
           to: subscriber.email,
